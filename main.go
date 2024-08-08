@@ -30,6 +30,6 @@ func main() {
 	http.HandleFunc("/courses", coursePage)
 	http.HandleFunc("/about", aboutPage)
 	http.HandleFunc("/contact", contactPage)
+	http.ListenAndServe("0.0.0.0:8081", nil)
 
-	http.ListenAndServe("0.0.0.0:8080", nil)
 }
