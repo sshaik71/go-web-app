@@ -17,3 +17,13 @@ spec:
             name: go-web-app-svc
             port:
               number: 80
+  - host: go.socialcloudsync.com
+    http:
+      paths: 
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: go-web-app-svc
+            port:
+              number: 80
