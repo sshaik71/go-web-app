@@ -42,7 +42,7 @@ jobs:
       with:
         version: v1.59.1
 
-  push:
+  push to Ecr:
     runs-on:  ubuntu-latest
     needs: build
 
@@ -81,3 +81,28 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+
+  update-newtag-in-helm-chart:
+    runs-on: ubuntu-latest
+
+    needs: push
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.TOKEN }}
+
+    - name: Update tag in Helm chart
+      run: |
+        echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+        sed -i 's/tag: .*/tag: "${{"sha_short}}"/' helm/go-web-app-chart/values.yaml
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.email "skrahamanskk@gmail.com"
+        git config --global user.name "sshaik71"
+        git add helm/go-web-app-chart/values.yaml
+        git commit -m "Dyamically Updated tag in Helm chart"
+        git push
+    
