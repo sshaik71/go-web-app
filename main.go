@@ -30,6 +30,9 @@ func main() {
 	http.HandleFunc("/courses", coursePage)
 	http.HandleFunc("/about", aboutPage)
 	http.HandleFunc("/contact", contactPage)
-	http.ListenAndServe("0.0.0.0:8081", nil)
 
+	err := http.ListenAndServe("0.0.0.0:8081", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
