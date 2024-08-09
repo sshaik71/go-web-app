@@ -77,7 +77,7 @@ jobs:
         REGISTRY: public.ecr.aws
         REPOSITORY: go-web
         REGISTRY_ALIAS: c8n6i5p5
-        IMAGE_TAG: ${{ env.sha_short }}
+        IMAGE_TAG: ${{ github.run_id }}
       run: |
         docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
@@ -96,7 +96,7 @@ jobs:
     - name: Update tag in Helm chart
       run: |
         echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
-        sed -i 's/tag: .*/tag: "${{ env.sha_short }}"/' helm/go-web-app-chart/values.yaml
+        sed -i 's/tag: .*/tag: "${{ github.run_id }}"/' helm/go-web-app-chart/values.yaml
 
     - name: Commit and push changes
       run: |
